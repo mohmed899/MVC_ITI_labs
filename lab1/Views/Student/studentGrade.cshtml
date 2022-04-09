@@ -1,0 +1,16 @@
+﻿@model lab1.viewModels.StudentGradViewModel
+@{
+    ViewData["Title"] = "studentGrade";
+}
+<h1>@Model.StuName </h1>
+<h1>@Model.CrsName </h1>
+<h1>@Model.grade </h1>
+@if (Model.grade>=@Model.Mingrade)
+{
+    <div  style="background-color:green;">succes </div>
+}
+else
+{
+    <div style="background-color:red;">fail</div>
+}
+

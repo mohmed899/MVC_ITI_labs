@@ -1,0 +1,43 @@
+﻿@model  List< lab1.viewModels.StudentGradViewModel>
+@{
+    ViewData["Title"] = "studentGrades";
+}
+
+<h1>studentGrades</h1>
+
+
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+           
+            <th scope="col">name</th>
+            <th scope="col">course</th>
+            <th scope="col">grade</th>
+            <th scope="col">states</th>
+         
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stu in @Model)
+      {         <tr>
+                  <td> @stu.StuName </td>
+                  <td>@stu.CrsName</td>
+                  <td>@stu.grade</td>
+                @if (stu.grade>=stu.Mingrade)
+                {
+                   <td  style="background-color:green;">succes </td>
+                }
+                else
+                {
+                     <td style="background-color:red;">fail</td>
+                }
+                
+              </tr>
+               
+                  
+      }
+
+ 
+    </tbody>
+</table>

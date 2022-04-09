@@ -1,0 +1,40 @@
+﻿
+
+@model  List<Instructor>
+@{
+    ViewData["Title"] = "Index";
+}
+<h3> instructor Data</h3>
+
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">name</th>
+            <th scope="col">address</th>
+            <th scope="col">img</th>
+            <th scope="col">department</th>
+              <th scope="col">details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ins in @Model)
+      {         <tr>
+
+            <td> @ins.Id </td>
+                 <td>@ins.Name</td>
+                  <td>@ins.address </td>
+                  <td> <img src="/img/@ins.img"  width="100" height="100"> </td>              
+                <td>@ins.department.Name </td>
+                 <td><a href="/Instructor/details/@ins.Id">go to </a> </td>
+              </tr>
+               
+                  
+      }
+
+ 
+    </tbody>
+</table>
+
+
