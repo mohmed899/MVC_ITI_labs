@@ -8,6 +8,7 @@ namespace lab1.Models
         public string Name { get; set; }
         public string img { get; set; }
         public string address { get; set;}
+        public decimal salary { get; set; }
         [ForeignKey("department")]
         public int dept_id { get; set; }
         [ForeignKey("course")]

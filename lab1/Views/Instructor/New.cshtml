@@ -1,0 +1,56 @@
+﻿@model InstructorNewDataViewModel
+@{
+    ViewData["Title"] = "New";
+}
+
+<h1> ADD NEW Ins </h1>
+<form action=  "/Instructor/save/@Model.instructor.Id">
+    <div class="form-group">
+        <label for="ins_name">Name</label>
+        <input type="text" class="form-control" id="ins_name" placeholder="Enter name" name="Name" value=@Model.instructor.Name>
+    </div>
+    <div class="form-group">
+        <label for="ins_address">Name</label>
+        <input type="text" class="form-control" id="ins_address" placeholder="Enter Address" name="address" value=@Model.instructor.address>
+    </div>
+    <div>
+        <label for="dept_id">Department</label>
+        <select id="dept_id" name="dept_id"  class="form-control">
+            @foreach (var m in @Model.departments)
+            {
+                if (@Model.instructor.dept_id == m.Id)
+                {
+                    <option selected value=@m.Id>@m.Name</option>
+                }
+                else
+
+                {
+                    <option value=@m.Id>@m.Name</option>
+                }
+
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="crs_id">Course</label>
+        <select id="crs_id" name="crs_id"  class="form-control">
+            @foreach (var c in @Model.courses)
+            {
+                if (@Model.instructor.crs_id == c.Id)
+                {
+                    <option selected value=@c.Id>@c.Name</option>
+                }
+                else
+                {
+                    <option value=@c.Id>@c.Name</option>
+                }
+            }
+        </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
