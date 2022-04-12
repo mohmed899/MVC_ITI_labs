@@ -1,0 +1,55 @@
+﻿@model lab1.Models.Course
+
+@{
+    ViewData["Title"] = "New";
+    SelectList departments = new SelectList( ViewBag.department,"Id","Name");
+
+}
+
+<h1>New</h1>
+
+<h4>Course</h4>
+<hr />
+<div class="row">
+    <div class="  m-auto col-5" >
+        <form asp-action="Save" method="post" asp-controller="Course" asp-route-Id ="@Model.Id" >
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+               <input hidden asp-for="Id" class="form-control" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="degree" class="control-label"></label>
+                <input asp-for="degree" class="form-control" />
+                <span asp-validation-for="degree" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="minDegree" class="control-label"></label>
+                <input asp-for="minDegree" class="form-control" />
+               <span asp-validation-for="minDegree" class="text-danger" ></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="dept_id" class="control-label"></label>
+                <select asp-for="dept_id" class ="form-control" asp-items="departments"></select>
+            </div>
+            <div class="form-group">
+                <input  type="submit" value="Create" class="btn btn-primary w-100 rounded-1 " />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section scripts{
+    <script src="~/lib/jquery/dist/jquery.js" ></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js" ></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}
+

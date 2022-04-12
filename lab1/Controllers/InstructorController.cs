@@ -3,6 +3,10 @@ using lab1.Models;
 using System.Linq;
 using lab1.viewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.IO;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace lab1.Controllers
 {
@@ -46,7 +50,7 @@ namespace lab1.Controllers
         }
 
         //LAB 4 
-        public IActionResult Save(Instructor ins )
+        public IActionResult Save(Instructor ins , IFormFile poto)
         {
                 InstructorLayer instructorLayer = new InstructorLayer();
             if ( ins.Id ==0)
@@ -88,6 +92,31 @@ namespace lab1.Controllers
             instructorLayer.remove(id);
             return RedirectToAction("Index");
 
+        }
+
+
+
+        public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
+        {
+            long size = files.Sum(f => f.Length);
+
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    var filePath = Path.GetTempFileName();
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            // Process uploaded files
+            // Don't rely on or trust the FileName property without validation.
+
+            return Ok(new { count = files.Count, size });
         }
     }
 }
