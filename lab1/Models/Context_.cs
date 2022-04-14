@@ -14,11 +14,11 @@ namespace lab1.Models
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=MvcDB;Integrated Security=True");
-            base.OnConfiguring(optionsBuilder); 
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=MvcDB;Integrated Security=True");
+        //    base.OnConfiguring(optionsBuilder); 
+        //}
 
         public virtual DbSet<Trainee>trainees { get; set; }
         public virtual DbSet<Department>departments { get; set; }

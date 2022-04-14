@@ -5,36 +5,31 @@ namespace lab1.Controllers
 {
     public class StudentController : Controller
     {
-        StudentLayer db = new StudentLayer();
-       public StudentController()
+        IStudentLayer StudentLayer;
+       public StudentController( IStudentLayer student)
         {
-            db = new StudentLayer();
+            StudentLayer = student;
         }
         public IActionResult Index()
         {
-            object[] arr = new object[]
-            {
-                 db.getAll(),
-                 db.getStudentByID(1)
-            };
-            return View("student",arr);
+            
+            return View("student",StudentLayer.getAll());
         }
 
         public IActionResult details(int id )
         {
-            return View("details", db.getStudentByID(id));
+            return View("details", StudentLayer.getByID(id));
         }
 
         public IActionResult studentGrade(int id, string name)
         {
-            StudentGradViewModel student = new StudentGradViewModel();
-            return View(db.getStudentgrade(id , name));
+            return View(StudentLayer.getgrade(id , name));
         }
 
         public IActionResult studentGrades(int id)
         {
          
-            return View(db.getStudentgrades(id));
+            return View(StudentLayer.getCoursesGrades(id));
         }
 
     }

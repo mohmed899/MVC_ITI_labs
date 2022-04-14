@@ -60,7 +60,7 @@ namespace lab1.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(course);
+                _context.courses.Add(course);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

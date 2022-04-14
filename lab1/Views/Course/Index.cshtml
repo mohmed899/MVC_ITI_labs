@@ -1,11 +1,9 @@
 ﻿@model IEnumerable<Course>
 @{
     ViewData["Title"] = "Index";
-    string instructors = "";
-
 }
 
-<h1></h1>
+
 
 <table class="table">
     <thead class="thead-dark">
@@ -15,8 +13,8 @@
             <th scope="col">Dgree</th>
             <th scope="col">Min Dgree</th>
             <th scope="col">Department</th>
-            <th scope="col">Edite</th>
             <th scope="col">Delete</th>
+            <th scope="col">Edite</th>
             <th scope="col">instructors</th>
         </tr>
     </thead>
@@ -25,52 +23,55 @@
         @foreach (var crs in @Model)
         {
             <tr>
-                <td>@crs.Id</td>
+                <td id="ii">@crs.Id</td>
                 <td>@crs.Name</td>
                 <td>@crs.degree</td>
                 <td>@crs.minDegree</td>
                 <td>@crs.department.Name</td>
-                @* <td> <a asp-controller ></a> </td>*@
 
-                @{
+                @*bundel data for Edidt view // old virsion
+                    @{
                     var parms = new Dictionary<string, string>
-            {
-            { "Id",@crs.Id.ToString()  },
-            { "Name",@crs.Name.ToString()  },
-            { "degree",@crs.degree.ToString()  },
-            { "minDegree",@crs.minDegree.ToString()  },
-            { "dept_id",@crs.dept_id.ToString()  },
-            };
-                }
+                    {
+                    { "Id",@crs.Id.ToString()  },
+                    { "Name",@crs.Name.ToString()  },
+                    { "degree",@crs.degree.ToString()  },
+                    { "minDegree",@crs.minDegree.ToString()  },
+                    { "dept_id",@crs.dept_id.ToString()  }
+                    };
+                    }
+                    <td> <button @*asp-controller="Course" asp-action="New" asp-all-route-data="parms"  name="Edit" value=@crs.Id> Edidt</button> </td>*@
+                <td><a asp-controller="Course" asp-action="Remove" asp-route-Id="@crs.Id" name="remove"> remove</a></td>
+                <td><button type="button" class="btn btn-primary" id=@crs.Id name="Edit">Edite</button></td>
 
-
-                <td> <a asp-controller="Course" asp-action="New" asp-all-route-data="parms"> Edidt</a> </td>
                 <td>
-                    <a asp-controller="Course" asp-action="Remove" asp-route-Id="@crs.Id" name="remove"> remove</a>
-
-
+                    @foreach (Instructor ins in @crs.instructor)
+                    {
+                        <a asp-controller="Instructor" asp-action="details" asp-route-Id="@ins.Id">@ins.Name</a>
+                    }
                 </td>
-              @*  @foreach (Instructor ins in @crs.instructor)
-                {
-                    instructors += $"<a href= '/Instructor/details/{@ins.Id}'> Edidt</a >";
-                }
 
-                <td> @instructors </td>*@
             </tr>
         }
-
 
     </tbody>
 </table>
 <div class="mx-auto" style="width: 200px;">
     <a class="btn btn-primary mx-auto" asp-controller="Course" asp-action="New" sytyle role="button">ADD</a>
-
 </div>
 
-<script>
-     for ( var ele  of  document.getElementsByName("remove"))
-    ele.addEventListener("click",(e)=>{
-     if( confirm("delete")==false)
-      e.preventDefault();
-     })
-</script>
+<div id="pa"></div>
+
+
+@section scripts{
+    <script>
+        function fun1(){
+            console.log("blur");
+        }
+        </script>
+    <script src="~/js/CourseIndex.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js" ></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+
+}

@@ -1,5 +1,5 @@
 ﻿<h3>Students Data</h3>
-
+@model  List<Trainee>;
 
 <table class="table">
     <thead class="thead-dark">
@@ -7,24 +7,22 @@
             <th scope="col">id</th>
             <th scope="col">name</th>
             <th scope="col">address</th>
-            <th scope="col">img</th>
             <th scope="col">details</th>
         </tr>
     </thead>
     <tbody>
-@*        @foreach (Student stu in Model[1])
-      {*@         <tr>
+      @foreach (Trainee stu in Model)
+      {       <tr>
 
-            <td>Model[1].id </td>
-                 <td>@Model[1].name</td>
-                  <td>@Model[1].address </td>
-                  <td> <img src="/img/Model[1].img"  width="100" height="100"> </td>
-                  <td><a href="/student/details/Model[1].id">go to </a> </td>
+            <td>@stu.Id </td>
+                 <td>@stu.name</td>
+                  <td>@stu.address </td>
+                  <td><a href="/student/details/@stu.Id">go to </a> </td>
               </tr>
                
-      @*               
+                  
       }
-*@
+
  
     </tbody>
 </table>

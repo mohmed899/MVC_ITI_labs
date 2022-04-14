@@ -17,7 +17,8 @@ namespace lab1.Models
         [MaxLength(20, ErrorMessage = "course name must be between 2-20 char")]
         [MinLength(2, ErrorMessage ="course name must be between 2-20 char")]     
         
-        [Remote("IsValidName", "Course", ErrorMessage = "already Exist", AdditionalFields = "Id")]
+      // [Uniqe]
+         [Remote("IsValidName", "Course", ErrorMessage = "already Exist", AdditionalFields = "Id")]
         public string Name { get; set; }
 
         [Required]

@@ -1,5 +1,7 @@
+using lab1.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +28,19 @@ namespace lab1
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
+
+            //built-in serves 
+            services.AddDbContext<Context_>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("cs"));
+            });
+
+
+            //custom servise 
+            services.AddScoped<ICourseLayer, CourseLayer>();
+            services.AddScoped<IInstructorLayer, InstructorLayer>();
+            services.AddScoped<IStudentLayer, StudentLayer>();
+            services.AddScoped<IDepartmentLayer, DepartmentLayer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +55,7 @@ namespace lab1
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
-
+            
             app.UseRouting();
 
             app.UseSession();

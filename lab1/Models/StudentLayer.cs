@@ -4,32 +4,27 @@ using Microsoft.EntityFrameworkCore;
 using lab1.viewModels;
 namespace lab1.Models
 {
-    public class StudentLayer
+    public class StudentLayer : IStudentLayer
     {
-        Context_ db = new Context_();
-        List<Student> students;
-      public  StudentLayer()
+        Context_ db;
+        public StudentLayer(Context_ context_)
         {
-            students = new List<Student>();
-            students.Add(new Student() { id=1,name="mohamed",address="123 st",img="1.jpg"});
-            students.Add(new Student() { id = 2,name = "kaled", address = "123 st", img = "2.jpg" });
-            students.Add(new Student() { id = 3,name = "Issawi", address = "123 st", img = "1.jpg" });           
-        }
-       public  List<Student> getAll()
-        {
-            return students;
-        }
-        public Student getStudentByID (int id )
-        {
-            return students.Find(s=>s.id==id);
+            db = context_;
         }
 
-        public StudentGradViewModel getStudentgrade(int id , string crsName )
+        public List<Trainee> getAll()
         {
-            var result = db.crsResults.Include(r=>r.course).Include(r=>r.trainee).FirstOrDefault(r => r.train_id == id && r.course.Name == crsName);
-            //var student = result.trainee;
-            //var course = result.course;
-            if ( result != null)
+            return db.trainees.ToList();
+        }
+        public Trainee getByID(int id)
+        {
+            return db.trainees.SingleOrDefault(T => T.Id == id);
+        }
+
+        public StudentGradViewModel getgrade(int id, string crsName)
+        {
+            var result = db.crsResults.Include(r => r.course).Include(r => r.trainee).FirstOrDefault(r => r.train_id == id && r.course.Name == crsName);
+            if (result != null)
             {
                 StudentGradViewModel stuVM = new StudentGradViewModel()
                 {
@@ -40,18 +35,16 @@ namespace lab1.Models
                 };
                 return stuVM;
             }
-            return null; 
+            return null;
         }
 
-        public List<StudentGradViewModel> getStudentgrades(int id)
+        public List<StudentGradViewModel> getCoursesGrades(int id)
         {
             var result = db.crsResults.Include(r => r.course).Include(r => r.trainee).Where(r => r.train_id == id);
-            //var student = result.trainee;
-            //var course = result.course;
             if (result != null)
             {
-                List<StudentGradViewModel> students = new List<StudentGradViewModel> ();
-                foreach(var student in result)
+                List<StudentGradViewModel> students = new List<StudentGradViewModel>();
+                foreach (var student in result)
                 {
                     StudentGradViewModel stuVM = new StudentGradViewModel()
                     {
@@ -60,9 +53,9 @@ namespace lab1.Models
                         StuName = student.trainee.name,
                         Mingrade = student.course.minDegree
                     };
-                    students.Add(stuVM);    
+                    students.Add(stuVM);
                 }
-                
+
                 return students;
             }
             return null;

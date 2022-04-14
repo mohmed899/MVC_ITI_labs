@@ -9,12 +9,14 @@ namespace lab1.Controllers
 {
     public class CourseController : Controller
     {
-        CourseLayer courseLayer;
-        public CourseController()
+        ICourseLayer courseLayer;
+        IDepartmentLayer departmentLayer;
+        public CourseController(ICourseLayer course, IDepartmentLayer department)
         {
-            courseLayer = new CourseLayer();
+            courseLayer = course;
+            departmentLayer = department;
         }
-        public async Task <IActionResult> Index()
+        public IActionResult Index()
         {           
             var list = courseLayer.getAll();
             return View(list.Result);
@@ -22,16 +24,14 @@ namespace lab1.Controllers
 
         public IActionResult New( Course course )
         {
-            DepartmentLayer departmentLayer = new DepartmentLayer();
-            ViewBag.department = departmentLayer.getAll().Result;
-          
+            ViewBag.department = departmentLayer.getAll().Result;          
             return View(course);
         
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Save( Course course)
+        public IActionResult Save(Course course)
         {
             if (ModelState.IsValid)
             {
@@ -40,7 +40,12 @@ namespace lab1.Controllers
 
             }
             else
-                return RedirectToAction("New", course);
+             return RedirectToAction("New", course);
+            //{
+             
+            //    ViewBag.department = departmentLayer.getAll().Result;
+            //    return PartialView("EditModle", course);
+            //}
         }
 
         public IActionResult Remove(int  id)
@@ -57,16 +62,15 @@ namespace lab1.Controllers
             return Json(true);
         }
 
-
         public IActionResult IsValidName(string Name , int Id)
         {
               Context_ db = new Context_();
 
 
             // its new course 
-            if( db.courses.SingleOrDefault(c => c.Id == Id)==null )
+            if( courseLayer.getByID(Id)==null )
             {
-              var  crs = db.courses.SingleOrDefault(c=>c.Name== Name);
+              var  crs = courseLayer.getByName(Name);
                 if (crs == null)
                     return Json(true);
                 else
@@ -75,8 +79,8 @@ namespace lab1.Controllers
             else
             {
 
-            var crs = db.courses.SingleOrDefault(c => c.Name == Name);
-            if (crs != null && crs!=db.courses.SingleOrDefault(c => c.Id == Id))
+            var crs = courseLayer.getByName(Name);
+            if (crs != null && crs != courseLayer.getByID(Id))
                 return Json(false);
             else
                 return Json(true);
@@ -84,5 +88,18 @@ namespace lab1.Controllers
 
 
         }
+
+        public IActionResult EditCourseModel (int id)
+        {
+            ViewBag.department = departmentLayer.getAll().Result;
+            return PartialView("EditModle",  courseLayer.getByID(id));
+        }
+
+        public IActionResult GetCoursDetailsPV(int id)
+        {
+           
+            return PartialView("_CourseDetails", courseLayer.getByID(id));
+        }
+
     }
 }

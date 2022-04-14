@@ -12,22 +12,26 @@ namespace lab1.Controllers
 {
     public class InstructorController : Controller
     {
-        Context_ db;
-        public InstructorController()
+        
+        IInstructorLayer instructorLayer;
+        ICourseLayer courseLayer;
+        IDepartmentLayer departmentLayer;
+        public InstructorController( IInstructorLayer instructor ,ICourseLayer course , IDepartmentLayer department )
         {
-            db = new Context_();
+          
+            instructorLayer = instructor;
+            courseLayer = course;
+            departmentLayer = department;
         }
         public IActionResult Index()
         {
-            var l = db.Instructors.Include(ins => ins.department).ToList();
-            
-            return View( l);
+          
+            return View(instructorLayer.getAll());
         }
 
         public IActionResult details(int id )
         {
-            var l = db.Instructors.Include(ins=>ins.department).Include(ins=>ins.course).FirstOrDefault(ins=>ins.Id==id);
-            return View(l);
+            return View(instructorLayer.getbyID(id));
         }
         //lab 4
         public IActionResult New(int id )
@@ -37,13 +41,13 @@ namespace lab1.Controllers
             if (id == 0)
                 ins = new Instructor();
             else // we just want to edit old one 
-                ins = db.Instructors.SingleOrDefault(i => i.Id == id);
+                ins = instructorLayer.getbyID(id);
 
             InstructorNewDataViewModel Insvm= new InstructorNewDataViewModel()
             {
                 instructor = ins,
-                courses = db.courses.ToList(),
-                departments = db.departments.ToList()
+                courses = courseLayer.getAll().Result,
+                departments = departmentLayer.getAll().Result,
             };
 
             return View(Insvm);
@@ -52,7 +56,7 @@ namespace lab1.Controllers
         //LAB 4 
         public IActionResult Save(Instructor ins , IFormFile poto)
         {
-                InstructorLayer instructorLayer = new InstructorLayer();
+              
             if ( ins.Id ==0)
             {
                 bool succes = instructorLayer.AddInstructor(ins);
@@ -79,8 +83,8 @@ namespace lab1.Controllers
             InstructorNewDataViewModel Insvm = new InstructorNewDataViewModel()
             {
                 instructor = new Instructor(),
-                courses = db.courses.ToList(),
-                departments = db.departments.ToList()
+                courses = courseLayer.getAll().Result,
+                departments = departmentLayer.getAll().Result,
             };
 
             return View(Insvm);
@@ -88,12 +92,19 @@ namespace lab1.Controllers
 
         public IActionResult Remove(int id)
         {
-            InstructorLayer instructorLayer = new InstructorLayer();
+           ;
             instructorLayer.remove(id);
             return RedirectToAction("Index");
 
         }
 
+        public IActionResult GetCourseOfDepartment( int id)
+        {
+       
+            return Json(departmentLayer.getCourses(id));
+        }
+
+      
 
 
         public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
